@@ -1,0 +1,794 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد يا حنان ✨ | إهداء من جبريل</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .font-amiri {
+            font-family: 'Amiri', serif;
+        }
+
+        /* Glassmorphism Styling */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Background Gradient & Animated Stars */
+        body {
+            background: radial-gradient(circle at center, #2d1b4e 0%, #120b24 60%, #080411 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #ffffff;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 10, 30, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Glow Animations */
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(244, 114, 182, 0.6)); }
+            50% { filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.8)); }
+        }
+
+        .glow-effect {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        /* Birthday Cake Styling */
+        .cake-container {
+            position: relative;
+            width: 240px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .plate {
+            width: 270px;
+            height: 18px;
+            background: linear-gradient(to right, #e2e8f0, #ffffff, #cbd5e1);
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            left: -15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .layer {
+            position: absolute;
+            width: 100%;
+            border-radius: 14px 14px 8px 8px;
+            box-shadow: inset 0 -4px 10px rgba(0,0,0,0.2);
+        }
+
+        .layer-bottom {
+            height: 60px;
+            bottom: 18px;
+            background: linear-gradient(135deg, #f43f5e, #be123c);
+        }
+
+        .layer-middle {
+            height: 50px;
+            bottom: 78px;
+            width: 85%;
+            left: 7.5%;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+        }
+
+        .layer-top {
+            height: 45px;
+            bottom: 128px;
+            width: 70%;
+            left: 15%;
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+
+        .icing {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #fff;
+            border-radius: 10px 10px 12px 12px;
+            opacity: 0.9;
+        }
+
+        /* Candles & Flame */
+        .candle-holder {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 22px;
+            z-index: 10;
+        }
+
+        .candle {
+            width: 10px;
+            height: 35px;
+            background: repeating-linear-gradient(45deg, #60a5fa, #60a5fa 5px, #ffffff 5px, #ffffff 10px);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .flame {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(ellipse at bottom, #fef08a 0%, #f97316 60%, transparent 100%);
+            border-radius: 50% 50% 20% 20%;
+            filter: drop-shadow(0 0 8px #f59e0b);
+            animation: flicker 0.6s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .flame.off {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        .smoke {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 15px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .candle.blown .smoke {
+            animation: riseSmoke 1.5s ease-out;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+            100% { transform: translateX(-50%) scale(1.15) rotate(2deg); }
+        }
+
+        @keyframes riseSmoke {
+            0% { opacity: 0.8; transform: translateX(-50%) translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(2.5); }
+        }
+
+        /* Gift Box Styles */
+        .gift-box {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .gift-box:hover {
+            transform: translateY(-8px) scale(1.03);
+        }
+
+        .gift-lid {
+            transition: transform 0.5s ease;
+            transform-origin: bottom right;
+        }
+
+        .gift-box.opened .gift-lid {
+            transform: translateY(-35px) rotate(-15deg);
+        }
+
+        /* iPhone Mockup Container */
+        .iphone-frame {
+            width: 320px;
+            height: 640px;
+            background: #111;
+            border-radius: 50px;
+            border: 4px solid #333;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dynamic-island {
+            width: 95px;
+            height: 26px;
+            background: #000;
+            border-radius: 20px;
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        .iphone-screen {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop') center/cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 45px 16px 20px 16px;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background: rgba(6, 3, 15, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-between min-h-screen py-8 px-4 sm:px-6">
+
+    <!-- Ambient Lights -->
+    <div class="fixed top-10 left-10 w-72 h-72 bg-pink-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <!-- Header Section -->
+    <header class="text-center z-10 max-w-2xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300 text-sm font-medium mb-2 floating">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+            <span>مناسبة خاصة جداً • 22 أكتوبر</span>
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+        </div>
+        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-purple-200 to-amber-200 leading-tight">
+            عيد ميلاد سعيد يا حنان 🎉
+        </h1>
+        <p class="text-gray-300 text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
+            اليوم تبتسم الدنيا لعامكِ الجديد.. كتبتُ لكِ هذه اللفتة المبرمجة بكل حب وتقدير لنسعد بكِ وبوجودكِ الجميل.
+        </p>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="w-full max-w-5xl z-10 my-8 space-y-12">
+
+        <!-- Interactive Birthday Cake Container -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i data-lucide="cake" class="w-32 h-32 text-pink-300"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-amber-300 mb-2 flex items-center justify-center gap-2">
+                <i data-lucide="flame" class="w-6 h-6 text-amber-400"></i>
+                كعكة الأغنيات والشموع
+            </h2>
+            <p class="text-sm text-gray-300 mb-6">انقري على الشموع لإطفائها أو استخدمي الزر أدناه لإشعال الفرحة!</p>
+
+            <!-- Cake Graphic -->
+            <div class="cake-container my-8 glow-effect">
+                <div class="candle-holder">
+                    <div class="candle" onclick="blowSingleCandle(this)">
+                        <div class="flame"></div>
+                        <div class="smoke"></div>
+                    </div>
+                    <div class="candle" onclick="blowSingleCandle(this)">
+                        <div class="flame"></div>
+                        <div class="smoke"></div>
+                    </div>
+                    <div class="candle" onclick="blowSingleCandle(this)">
+                        <div class="flame"></div>
+                        <div class="smoke"></div>
+                    </div>
+                </div>
+                <div class="layer layer-top">
+                    <div class="icing"></div>
+                </div>
+                <div class="layer layer-middle">
+                    <div class="icing"></div>
+                </div>
+                <div class="layer layer-bottom">
+                    <div class="icing"></div>
+                </div>
+                <div class="plate"></div>
+            </div>
+
+            <!-- Cake Actions -->
+            <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+                <button id="blowCandlesBtn" onclick="blowAllCandles()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-600 hover:to-pink-600 font-bold text-white shadow-lg shadow-pink-500/25 transition-all flex items-center gap-2 active:scale-95">
+                    <i data-lucide="wind" class="w-5 h-5"></i>
+                    <span>إطفاء الشموع والتمني ✨</span>
+                </button>
+                <button onclick="triggerMusicToggle()" id="musicBtn" class="px-5 py-3 rounded-xl glass-card hover:bg-white/10 font-medium text-pink-200 border border-pink-500/30 transition-all flex items-center gap-2">
+                    <i data-lucide="music" class="w-5 h-5 text-pink-400"></i>
+                    <span id="musicText">تشغيل نغمة الاحتفال 🎵</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Interactive Gift Boxes Grid -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-pink-200 mb-2">صناديق المفاجآت والكلمات 🎁</h2>
+                <p class="text-gray-300 text-sm">اضغطي على كل صندوق لتفتحي رسالة معطّرة وعبارات عميقة</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Gift Box 1 -->
+                <div class="gift-box glass-card rounded-2xl p-6 text-center border-t-2 border-pink-400/50" onclick="openGift(1, this)">
+                    <div class="w-16 h-16 mx-auto mb-4 relative">
+                        <div class="gift-lid absolute inset-0 bg-pink-500 rounded-lg shadow-md flex items-center justify-center">
+                            <div class="w-full h-2 bg-amber-300"></div>
+                        </div>
+                        <div class="gift-body absolute bottom-0 w-full h-12 bg-pink-600 rounded-b-lg flex items-center justify-center">
+                            <div class="w-3 h-full bg-amber-300"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-pink-300 mb-1">المفاجأة الأولى</h3>
+                    <p class="text-xs text-gray-400">انقري لفتح صندوق الأمنيات</p>
+                </div>
+
+                <!-- Gift Box 2 -->
+                <div class="gift-box glass-card rounded-2xl p-6 text-center border-t-2 border-purple-400/50" onclick="openGift(2, this)">
+                    <div class="w-16 h-16 mx-auto mb-4 relative">
+                        <div class="gift-lid absolute inset-0 bg-purple-500 rounded-lg shadow-md flex items-center justify-center">
+                            <div class="w-full h-2 bg-pink-300"></div>
+                        </div>
+                        <div class="gift-body absolute bottom-0 w-full h-12 bg-purple-600 rounded-b-lg flex items-center justify-center">
+                            <div class="w-3 h-full bg-pink-300"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-purple-300 mb-1">المفاجأة الثانية</h3>
+                    <p class="text-xs text-gray-400">انقري لكشف رسالة التقدير</p>
+                </div>
+
+                <!-- Gift Box 3 -->
+                <div class="gift-box glass-card rounded-2xl p-6 text-center border-t-2 border-amber-400/50" onclick="openGift(3, this)">
+                    <div class="w-16 h-16 mx-auto mb-4 relative">
+                        <div class="gift-lid absolute inset-0 bg-amber-500 rounded-lg shadow-md flex items-center justify-center">
+                            <div class="w-full h-2 bg-purple-300"></div>
+                        </div>
+                        <div class="gift-body absolute bottom-0 w-full h-12 bg-amber-600 rounded-b-lg flex items-center justify-center">
+                            <div class="w-3 h-full bg-purple-300"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-amber-300 mb-1">المفاجأة الثالثة</h3>
+                    <p class="text-xs text-gray-400">انقري لفتح دعوة التفاؤل</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grand Gift Banner: iPhone 17 Surprise Trigger -->
+        <section class="glass-panel rounded-3xl p-8 text-center relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-pink-900/30 to-amber-900/30 border border-amber-500/30">
+            <div class="max-w-xl mx-auto space-y-4">
+                <div class="w-16 h-16 mx-auto bg-gradient-to-tr from-amber-400 to-pink-500 rounded-2xl p-0.5 shadow-xl shadow-amber-500/20 floating">
+                    <div class="w-full h-full bg-gray-950 rounded-[14px] flex items-center justify-center">
+                        <i data-lucide="smartphone" class="w-8 h-8 text-amber-300"></i>
+                    </div>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-amber-200">
+                    📱 المفاجأة الكبرى الخاصة!
+                </h2>
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                    تم وصول طرد فاخر خصيصاً باسمكِ يا **حنان**، يحتوي على أحدث هاتف ذكي افتراضي من جبريل!
+                </p>
+                <button onclick="openIphoneModal()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-amber-500 hover:opacity-95 font-black text-white text-lg shadow-xl shadow-purple-500/30 transition-all flex items-center justify-center gap-3 mx-auto active:scale-95">
+                    <i data-lucide="gift" class="w-6 h-6"></i>
+                    <span>استلام آيفون 17 برو ماكس (iPhone 17 Pro Max) 📲</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Signature -->
+    <footer class="z-10 text-center py-6 border-t border-white/10 w-full max-w-4xl mt-6">
+        <p class="text-gray-300 text-base font-light flex items-center justify-center gap-2">
+            مُصمم بكل شغف ومحبة لـ <span class="font-bold text-pink-300">حنان</span>
+        </p>
+        <p class="text-amber-400 font-bold text-lg mt-1 tracking-wider">
+            ✨ إهداء خاص من: <span class="underline decoration-pink-500 underline-offset-4">جبريل</span> ✨
+        </p>
+    </footer>
+
+    <!-- Interactive Canvas for Floating Hearts & Confetti -->
+    <canvas id="heartsCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Gift Details Modal -->
+    <div id="giftModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-lg w-full text-center relative border border-pink-500/30 shadow-2xl animate-in fade-in zoom-in duration-300">
+            <button onclick="closeModal('giftModal')" class="absolute top-4 left-4 text-gray-400 hover:text-white bg-white/10 p-2 rounded-full">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="giftModalIcon" class="w-16 h-16 mx-auto mb-4 bg-pink-500/20 text-pink-300 rounded-full flex items-center justify-center">
+                <i data-lucide="heart" class="w-8 h-8"></i>
+            </div>
+            <h3 id="giftModalTitle" class="text-2xl font-bold text-pink-200 mb-3"></h3>
+            <div id="giftModalContent" class="text-gray-200 text-base sm:text-lg leading-relaxed font-amiri mb-6 text-right bg-white/5 p-4 rounded-xl border border-white/10"></div>
+            <button onclick="closeModal('giftModal')" class="w-full py-3 rounded-xl bg-pink-500 hover:bg-pink-600 font-bold text-white transition-all">
+                أتمنى لكِ أوقاتاً ساحرة 💕
+            </button>
+        </div>
+    </div>
+
+    <!-- iPhone 17 Pro Max Interactive Modal -->
+    <div id="iphoneModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="relative my-auto">
+            <!-- Close Modal Button -->
+            <button onclick="closeModal('iphoneModal')" class="absolute -top-10 left-0 text-white hover:text-pink-300 bg-white/10 p-2 rounded-full border border-white/20 z-50 flex items-center gap-1 text-xs">
+                <i data-lucide="x" class="w-4 h-4"></i> إغلاق الهاتف
+            </button>
+
+            <!-- iPhone Frame -->
+            <div class="iphone-frame">
+                <!-- Dynamic Island -->
+                <div class="dynamic-island flex items-center justify-between px-3 text-[10px] text-gray-400">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <div class="flex items-center gap-1 text-pink-300 font-bold">
+                        <i data-lucide="heart" class="w-3 h-3 fill-pink-500 text-pink-500"></i>
+                        <span>حنان</span>
+                    </div>
+                </div>
+
+                <!-- iPhone Screen Layer -->
+                <div class="iphone-screen">
+                    <!-- Status Bar -->
+                    <div class="flex justify-between items-center text-white text-xs font-semibold px-2">
+                        <span>9:41</span>
+                        <div class="flex items-center gap-1.5 text-xs">
+                            <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
+                            <i data-lucide="battery" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Lockscreen / Main Content Wrapper -->
+                    <div id="iphoneLockScreen" class="flex-1 flex flex-col justify-between py-6 space-y-4">
+                        <!-- Clock & Date -->
+                        <div class="text-center text-white space-y-1">
+                            <p class="text-xs font-medium text-pink-200">الخميس، 22 أكتوبر</p>
+                            <h2 class="text-5xl font-extrabold tracking-tight">22:22</h2>
+                            <p class="text-[11px] text-amber-300">✨ يوم ميلادكِ الميمون ✨</p>
+                        </div>
+
+                        <!-- Notification Card (Message from Jibreel) -->
+                        <div class="glass-panel p-3.5 rounded-2xl text-right space-y-2 border border-pink-400/40 shadow-xl bg-black/40 backdrop-blur-md">
+                            <div class="flex items-center justify-between text-xs text-gray-300">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center text-[10px] text-white font-bold">ج</div>
+                                    <span class="font-bold text-pink-300">رسالة جديدة من جبريل</span>
+                                </div>
+                                <span class="text-[10px] text-gray-400">الآن</span>
+                            </div>
+                            <p class="text-xs text-white leading-snug font-medium">
+                                "كل عام وأنتِ يا حنان رمزٌ للرقي والنقاء. أرسلتُ لكِ هذا الهاتف المحمل ببطاقة تهنئة خاصة!"
+                            </p>
+                        </div>
+
+                        <!-- Unlock Button -->
+                        <div class="text-center">
+                            <button onclick="unlockIphone()" class="px-6 py-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-xs font-bold text-white transition-all shadow-lg active:scale-95 flex items-center gap-2 mx-auto">
+                                <i data-lucide="lock-keyhole-open" class="w-3.5 h-3.5 text-amber-300"></i>
+                                <span>اضغطي لفتح القفل واستلام الإهداء</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- iPhone Unlocked Screen (Hidden by default) -->
+                    <div id="iphoneUnlockedScreen" class="hidden flex-1 flex-col justify-between py-2 text-right space-y-3">
+                        <div class="bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-amber-500/30 text-white space-y-3 max-h-[460px] overflow-y-auto">
+                            <div class="flex items-center gap-2 border-b border-white/10 pb-2">
+                                <div class="w-8 h-8 rounded-full bg-pink-500/30 border border-pink-400 flex items-center justify-center text-pink-300 font-bold">
+                                    🎁
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-amber-300">وثيقة إهداء آيفون 17 Pro Max</h4>
+                                    <p class="text-[10px] text-gray-400">خاص وحصري لـ حنان</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xs leading-relaxed font-amiri text-gray-200">
+                                🌟 <span class="text-pink-300 font-bold">إلى العزيزة حنان:</span><br>
+                                يسعدني في يوم 22 أكتوبر أن أقدم لكِ هذا الهاتف الافتراضي كرمزٍ للتقدير والامتنان. أتمنى لكِ عاماً مليئاً بالإنجازات واللحظات السعيدة، وأن تلتقطي به أجمل ذكرياتكِ القادمة!
+                            </p>
+
+                            <div class="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20 text-[11px] text-pink-200 space-y-1">
+                                <p class="font-bold">✨ مواصفات بطاقة الإهداء:</p>
+                                <ul class="list-disc list-inside text-[10px] text-gray-300 space-y-0.5">
+                                    <li>السعة: أمنيات غير محدودة بالخير</li>
+                                    <li>اللون: تيتانيوم وردي ملكي</li>
+                                    <li>المرسل: جبريل</li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center pt-2">
+                                <p class="text-[11px] text-amber-300 font-bold">دمتِ بخير وسعادة دائماً ❤️</p>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Home Bar -->
+                        <div class="w-28 h-1 bg-white/60 rounded-full mx-auto cursor-pointer" onclick="lockIphone()"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Audio Context for Ambient Birthday Melody (Web Audio API)
+        let audioCtx = null;
+        let isPlaying = false;
+        let musicInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playNote(freq, duration, delay) {
+            setTimeout(() => {
+                if (!isPlaying || !audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration);
+                } catch(e) {}
+            }, delay);
+        }
+
+        function playHappyBirthdayMelody() {
+            // Notes for Happy Birthday
+            const notes = [
+                { f: 261.63, d: 0.3 }, { f: 261.63, d: 0.3 }, { f: 293.66, d: 0.6 },
+                { f: 261.63, d: 0.6 }, { f: 349.23, d: 0.6 }, { f: 329.63, d: 1.0 },
+                { f: 261.63, d: 0.3 }, { f: 261.63, d: 0.3 }, { f: 293.66, d: 0.6 },
+                { f: 261.63, d: 0.6 }, { f: 392.00, d: 0.6 }, { f: 349.23, d: 1.0 }
+            ];
+            let timeAccumulator = 0;
+            notes.forEach((note) => {
+                playNote(note.f, note.d, timeAccumulator * 1000);
+                timeAccumulator += note.d + 0.1;
+            });
+        }
+
+        function triggerMusicToggle() {
+            initAudio();
+            const musicBtn = document.getElementById('musicBtn');
+            const musicText = document.getElementById('musicText');
+
+            if (!isPlaying) {
+                isPlaying = true;
+                musicText.innerText = "إيقاف الموسيقى ⏸️";
+                playHappyBirthdayMelody();
+                musicInterval = setInterval(playHappyBirthdayMelody, 7000);
+                triggerConfetti();
+            } else {
+                isPlaying = false;
+                clearInterval(musicInterval);
+                musicText.innerText = "تشغيل نغمة الاحتفال 🎵";
+            }
+        }
+
+        // Candle Blowing Logic
+        let candlesBlown = 0;
+
+        function blowSingleCandle(candleElem) {
+            const flame = candleElem.querySelector('.flame');
+            if (!flame.classList.contains('off')) {
+                flame.classList.add('off');
+                candleElem.classList.add('blown');
+                candlesBlown++;
+                triggerMiniConfetti();
+                
+                if (candlesBlown >= 3) {
+                    setTimeout(() => {
+                        triggerBigFireworks();
+                    }, 300);
+                }
+            }
+        }
+
+        function blowAllCandles() {
+            const candles = document.querySelectorAll('.candle');
+            candles.forEach(c => blowSingleCandle(c));
+            triggerBigFireworks();
+        }
+
+        // Confetti Effects
+        function triggerConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#fbbf24', '#ec4899', '#60a5fa']
+            });
+        }
+
+        function triggerMiniConfetti() {
+            confetti({
+                particleCount: 25,
+                spread: 40,
+                origin: { y: 0.5 }
+            });
+        }
+
+        function triggerBigFireworks() {
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        // Gift Messages Data
+        const giftsData = {
+            1: {
+                title: "🌹 بطاقة أمنيات دافئة",
+                icon: "heart-handshake",
+                content: "في يوم 22 أكتوبر، نرسل لكِ أمنيات معطرة بالياسمين. نتمنى أن تحمل لكِ هذه السنة الجديدة صحةً لا تزول، وابتسامة لا تغيب، وتوفيقاً يرافق كل خطواتكِ. أنتِ تستحقين كل التميز والأيام المشرقة!"
+            },
+            2: {
+                title: "✨ عبارات تقدير واعتزاز",
+                icon: "sparkles",
+                content: "الذين يزرعون البهجة بوجودهم النقي يستحقون أن تحتفي بهم الدنيا. يا حنان، وجودكِ يضفي لمسة من الجمال والهدوء. دمتِ دائماً شمعةً تضيء حياة من حولكِ بالخير والمحبة."
+            },
+            3: {
+                title: "🚀 دعوة للتألق والتفاؤل",
+                icon: "rocket",
+                content: "العام الجديد من عمركِ ليس مجرد رقم، بل بداية لفصل جديد من الإنجازات والنجاحات الشاهقة. استمري في الإشراق وملاحقة شغفكِ، فالمستقبل ينتظر أجمل لحظاتكِ!"
+            }
+        };
+
+        function openGift(id, elem) {
+            elem.classList.add('opened');
+            const data = giftsData[id];
+            
+            document.getElementById('giftModalTitle').innerText = data.title;
+            document.getElementById('giftModalContent').innerText = data.content;
+            
+            triggerConfetti();
+            
+            setTimeout(() => {
+                document.getElementById('giftModal').classList.remove('hidden');
+            }, 300);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // iPhone Modal Logic
+        function openIphoneModal() {
+            document.getElementById('iphoneModal').classList.remove('hidden');
+            triggerConfetti();
+        }
+
+        function unlockIphone() {
+            document.getElementById('iphoneLockScreen').classList.add('hidden');
+            document.getElementById('iphoneUnlockedScreen').classList.remove('hidden');
+            document.getElementById('iphoneUnlockedScreen').classList.add('flex');
+            triggerMiniConfetti();
+        }
+
+        function lockIphone() {
+            document.getElementById('iphoneUnlockedScreen').classList.add('hidden');
+            document.getElementById('iphoneUnlockedScreen').classList.remove('flex');
+            document.getElementById('iphoneLockScreen').classList.remove('hidden');
+        }
+
+        // Background Floating Hearts Animation
+        const canvas = document.getElementById('heartsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const floatingItems = [];
+        const symbols = ['❤️', '✨', '🌸', '⭐', '💖'];
+
+        for (let i = 0; i < 25; i++) {
+            floatingItems.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 18 + 12,
+                symbol: symbols[Math.floor(Math.random() * symbols.length)],
+                speedY: Math.random() * 1 + 0.3,
+                opacity: Math.random() * 0.6 + 0.2
+            });
+        }
+
+        function animateFloatingItems() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            floatingItems.forEach(item => {
+                ctx.globalAlpha = item.opacity;
+                ctx.font = `${item.size}px Tajawal`;
+                ctx.fillText(item.symbol, item.x, item.y);
+                
+                item.y -= item.speedY;
+                if (item.y < -20) {
+                    item.y = canvas.height + 20;
+                    item.x = Math.random() * canvas.width;
+                }
+            });
+
+            requestAnimationFrame(animateFloatingItems);
+        }
+        animateFloatingItems();
+    </script>
+</body>
+</html>
+```
